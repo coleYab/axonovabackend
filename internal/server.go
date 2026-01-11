@@ -72,7 +72,8 @@ func (server *AppServer) RegisterRoutes(database *database.MongoDB, gMailer *mai
 }
 
 func (server *AppServer) Run(addr string) {
-	fmt.Println("Starting server on " + addr)
+	//fmt.Println("Starting server on " + addr)
+	addr = ":10000"
 	if err := server.engine.Run(addr); err != nil {
 		fmt.Println("Error starting server: ", err)
 	}
