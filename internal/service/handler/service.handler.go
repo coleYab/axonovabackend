@@ -1,77 +1,56 @@
 package handler
 
 import (
-	"axonova/internal/event/dto"
-	"axonova/internal/event/usecase"
+	"axonova/internal/service/dto"
+	"axonova/internal/service/usecase"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type ServiceHandler struct {
-	auc *usecase.EventUseCase
+	auc *usecase.ServiceUseCase
 }
 
-func NewServiceHandler(auc *usecase.EventUseCase) *ServiceHandler {
+func NewServiceHandler(auc *usecase.ServiceUseCase) *ServiceHandler {
 	return &ServiceHandler{
 		auc: auc,
 	}
 }
 
-func (ah *ServiceHandler) CreateEvent(ctx *gin.Context) {
-	var createEventDTO dto.CreateEventDTO
-	if err := ctx.ShouldBindJSON(&createEventDTO); err != nil {
+func (ah *ServiceHandler) CreateService(ctx *gin.Context) {
+	var serviceDTO dto.ServiceRequestDTO
+	if err := ctx.ShouldBindJSON(&serviceDTO); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	event, err := ah.auc.CreateEvent(createEventDTO)
+	service, err := ah.auc.CreateServiceRequest(serviceDTO)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"event": event})
+	ctx.JSON(http.StatusCreated, gin.H{"service": service})
 }
 
-func (ah *ServiceHandler) DeleteEvent(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if err := ah.auc.DeleteEvent(id); err != nil {
+func (ah *ServiceHandler) CreateContact(ctx *gin.Context) {
+	var contactDTO dto.ContactRequestDTO
+	if err := ctx.ShouldBindJSON(&contactDTO); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusNoContent, gin.H{})
-}
-
-func (ah *ServiceHandler) FindEventByID(ctx *gin.Context) {
-	id := ctx.Param("id")
-	event, err := ah.auc.GetEventByID(id)
+	contact, err := ah.auc.CreateContactRequest(contactDTO)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"event": event})
-}
-
-func (ah *ServiceHandler) BookEvent(ctx *gin.Context) {
-	var bookEventDTO dto.BookEventDTO
-	if err := ctx.ShouldBindJSON(&bookEventDTO); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	bookingData, err := ah.auc.BookEvent(bookEventDTO)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-
-	ctx.JSON(http.StatusCreated, gin.H{"result": bookingData})
+	ctx.JSON(http.StatusCreated, gin.H{"contact": contact})
 }
 
 func (ah *ServiceHandler) RegisterRoutes(routeGroup *gin.RouterGroup) {
-	routeGroup.GET("/:id", ah.FindEventByID)
-	routeGroup.POST("/", ah.CreateEvent)
-	routeGroup.DELETE("/:id", ah.DeleteEvent)
+	routeGroup.POST("/contact", ah.CreateContact)
+	routeGroup.POST("/service", ah.CreateService)
 }

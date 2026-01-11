@@ -7,6 +7,9 @@ import (
 	eventHandler "axonova/internal/event/handler"
 	eventRepository "axonova/internal/event/repository"
 	eventUseCase "axonova/internal/event/usecase"
+	"axonova/internal/service/handler"
+	"axonova/internal/service/repository"
+	"axonova/internal/service/usecase"
 	"axonova/pkg/database"
 	"axonova/pkg/mailer"
 	"fmt"
@@ -43,6 +46,14 @@ func (server *AppServer) RegisterRoutes(database *database.MongoDB, gMailer *mai
 	eveUseCase := eventUseCase.NewEventUseCase(eveRepository, gMailer)
 	eveHandler := eventHandler.NewEventHandler(eveUseCase)
 	eveHandler.RegisterRoutes(eventSubGroup)
+
+	// service related things
+	serviceCollection := database.GetCollection("service")
+	serviceSubGroup := apiSubgroup.Group("/service")
+	serviceRepository := repository.NewMongoServiceRepository(serviceCollection)
+	serviceUseCase := usecase.NewServiceUseCase(serviceRepository, gMailer)
+	serviceHandler := handler.NewServiceHandler(serviceUseCase)
+	serviceHandler.RegisterRoutes(serviceSubGroup)
 
 	server.engine.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"message": "pong"})
