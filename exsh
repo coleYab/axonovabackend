@@ -1,0 +1,2 @@
+go build -o axonova cmd/main.go
+./axonova
