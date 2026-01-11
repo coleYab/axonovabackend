@@ -14,7 +14,9 @@ import (
 	"axonova/pkg/mailer"
 	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -54,6 +56,15 @@ func (server *AppServer) RegisterRoutes(database *database.MongoDB, gMailer *mai
 	serviceUseCase := usecase.NewServiceUseCase(serviceRepository, gMailer)
 	serviceHandler := handler.NewServiceHandler(serviceUseCase)
 	serviceHandler.RegisterRoutes(serviceSubGroup)
+
+	server.engine.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: false,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	server.engine.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"message": "pong"})
