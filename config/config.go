@@ -9,11 +9,12 @@ import (
 )
 
 type Config struct {
-	MongoDBURI  string
-	MongoDBName string
-	Gmail       string
-	AppPassword string
-	Port        string
+	MongoDBURI    string
+	MongoDBName   string
+	Gmail         string
+	ReceiverGmail string
+	AppPassword   string
+	Port          string
 }
 
 func NewConfig() *Config {
@@ -26,12 +27,14 @@ func NewConfig() *Config {
 	}
 
 	CFG = &Config{
-		MongoDBURI:  dbUri,
-		AppPassword: getEnvFallback("APP_PASSWORD", ""),
-		Gmail:       getEnvFallback("GMAIL", ""),
-		MongoDBName: getEnvFallback("MONGODB_NAME", "axonovadb"),
-		Port:        getEnvFallback("PORT", ":8080"),
+		MongoDBURI:    dbUri,
+		AppPassword:   getEnvFallback("APP_PASSWORD", ""),
+		Gmail:         getEnvFallback("GMAIL", ""),
+		ReceiverGmail: getEnvFallback("RECEIVER_GMAIL", ""),
+		MongoDBName:   getEnvFallback("MONGODB_NAME", "axonovadb"),
+		Port:          getEnvFallback("PORT", ":8080"),
 	}
+	
 	return CFG
 }
 

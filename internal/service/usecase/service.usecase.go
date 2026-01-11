@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"axonova/config"
 	"axonova/internal/mailist"
 	"axonova/internal/service/dto"
 	"axonova/internal/service/entity"
@@ -56,7 +57,7 @@ func (su *ServiceUseCase) CreateServiceRequest(createServiceRequest dto.ServiceR
 	if err != nil {
 		return entity.Service{}, err
 	}
-	if err := su.gMailer.SendGmail(service.Email, "New service request | axonova consulting", acknowledgment); err != nil {
+	if err := su.gMailer.SendGmail(config.CFG.ReceiverGmail, "New service request | axonova consulting", acknowledgment); err != nil {
 		return entity.Service{}, err
 	}
 
@@ -88,7 +89,8 @@ func (su *ServiceUseCase) CreateContactRequest(createContactRequest dto.ContactR
 	if err != nil {
 		return entity.Contact{}, err
 	}
-	if err := su.gMailer.SendGmail(contactRequest.Email, "Contact US form submission | axonova consulting", acknowledgment); err != nil {
+
+	if err := su.gMailer.SendGmail(config.CFG.ReceiverGmail, "Contact US form submission | axonova consulting", acknowledgment); err != nil {
 		return entity.Contact{}, err
 	}
 
