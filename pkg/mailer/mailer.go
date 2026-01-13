@@ -1,31 +1,32 @@
 package mailer
 
-import gomail "gopkg.in/gomail.v2"
+import (
+	"fmt"
+	"log"
+
+	"github.com/resend/resend-go/v3"
+)
 
 type AppMailer struct {
-	Gmail       string
-	dialer      *gomail.Dialer
-	AppPassword string
+	sender string
+	client *resend.Client
 }
 
-func NewAppMailer(gmail, appPassword string) *AppMailer {
+func NewAppMailer(gmail, apiKey string) *AppMailer {
 	return &AppMailer{
-		Gmail: gmail,
-		dialer: gomail.NewDialer(
-			"smtp.gmail.com",
-			587,
-			gmail,
-			appPassword,
-		),
-		AppPassword: appPassword,
+		sender: gmail,
+		client: resend.NewClient(apiKey),
 	}
 }
 
 func (am *AppMailer) SendGmail(receiver, subject, body string) error {
-	msg := gomail.NewMessage()
-	msg.SetHeader("From", am.Gmail)
-	msg.SetHeader("To", receiver)
-	msg.SetHeader("Subject", subject)
-	msg.SetBody("text/html", body)
-	return am.dialer.DialAndSend(msg)
+	params := &resend.SendEmailRequest{From: am.sender, To: []string{receiver}, Subject: subject, Html: body}
+
+	sent, err := am.client.Emails.Send(params)
+	if err != nil {
+		return fmt.Errorf("failed to send an email %s", err.Error())
+	}
+
+	log.Println("Email was sent successfully, id=", sent.Id)
+	return nil
 }
