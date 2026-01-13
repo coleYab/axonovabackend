@@ -104,7 +104,7 @@ func GenerateAIReadinessEmail(userName string, userScore int) (string, error) {
     <body>
         <div class="container">
             <div class="header">
-                <div class="logo-placeholder">AXONVA CONSULTING</div>
+                <div class="logo-placeholder">Axonova CONSULTING</div>
                 <h1 style="margin:0; font-size:26px;">Your AI Readiness Assessment Results</h1>
             </div>
             <div class="content">
@@ -128,10 +128,10 @@ func GenerateAIReadinessEmail(userName string, userScore int) (string, error) {
                     {{end}}
                 </ul>
                 
-                <p style="margin-top: 30px;">Best regards,<br><strong>The Axonva Consulting Team</strong></p>
+                <p style="margin-top: 30px;">Best regards,<br><strong>The Axonova Consulting Team</strong></p>
             </div>
             <div class="footer">
-                &copy; {{.CurrentYear}} Axonva Consulting.
+                &copy; {{.CurrentYear}} Axonova Consulting.
             </div>
         </div>
     </body>
@@ -189,7 +189,7 @@ func GenerateContactFormEmail(name, email, message string) (string, error) {
     <body>
         <div class="wrapper">
             <div class="header">
-                <div style="font-size: 18px; font-weight: 900; letter-spacing: 2px;">AXONVA</div>
+                <div style="font-size: 18px; font-weight: 900; letter-spacing: 2px;">Axonova</div>
                 <h2 style="margin: 10px 0 0 0;">New Inquiry Received</h2>
             </div>
             <div class="content">
@@ -206,7 +206,7 @@ func GenerateContactFormEmail(name, email, message string) (string, error) {
                 </div>
             </div>
             <div class="footer">
-                &copy; {{.CurrentYear}} Axonva Consulting Internal Notification.
+                &copy; {{.CurrentYear}} Axonova Consulting Internal Notification.
             </div>
         </div>
     </body>
@@ -311,7 +311,7 @@ func GenerateServiceRequestEmail(data ServiceRequestData) (string, error) {
                 </div>
             </div>
             <div class="footer">
-                This request was generated via the Axonva Consulting Service Portal.
+                This request was generated via the Axonova Consulting Service Portal.
             </div>
         </div>
     </body>
@@ -372,13 +372,13 @@ func GenerateSenderAcknowledgment(name string, isServiceRequest bool) (string, e
     <body>
         <div class="email-container">
             <div class="banner">
-                <div class="logo">AXONVA</div>
+                <div class="logo">Axonova</div>
             </div>
             <div class="body-content">
                 <h2 style="margin-top: 0; color: {{.PrimaryColor}};">We’ve received your {{.FormType}}</h2>
                 <p>Hello <strong>{{.Name}}</strong>,</p>
                 
-                <p>Thank you for reaching out to Axonva Consulting. We wanted to let you know that <strong>we have received your email</strong> and our team is currently reviewing the details.</p>
+                <p>Thank you for reaching out to Axonova Consulting. We wanted to let you know that <strong>we have received your email</strong> and our team is currently reviewing the details.</p>
                 
                 <div class="highlight-box">
                     <p style="margin: 0; font-weight: 500;">
@@ -389,10 +389,10 @@ func GenerateSenderAcknowledgment(name string, isServiceRequest bool) (string, e
                 <p>If your matter is urgent, please feel free to reply to this thread or give us a call.</p>
                 
                 <p style="margin-top: 40px;">Best regards,<br>
-                <strong>Axonva Consulting Team</strong></p>
+                <strong>Axonova Consulting Team</strong></p>
             </div>
             <div class="footer">
-                &copy; {{.CurrentYear}} Axonva Consulting. AI Consultation Done Right.
+                &copy; {{.CurrentYear}} Axonova Consulting. AI Consultation Done Right.
             </div>
         </div>
     </body>
